@@ -1,0 +1,121 @@
+#
+# Copyright (C) 2020 narra.eu
+#
+# This file is part of Narra Platform Core.
+#
+# Narra Platform Core is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Narra Platform Core is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Narra Platform Core. If not, see <http://www.gnu.org/licenses/>.
+#
+# Authors: Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
+#
+
+module Narra
+  module Core
+    module Items
+
+      # Check item for connector and return back
+      def Core.check_item(url)
+        # input check
+        return nil if url.nil?
+
+        # connector proxies container
+        proxies = []
+
+        # parse url for proper connector
+        connectors.each do |conn|
+          if conn.valid?(url)
+            proxies = conn.resolve(url)
+            # break the loop
+            break
+          end
+        end
+
+        # return
+        return proxies
+      end
+
+      # Add item into the NARRA
+      def Core.add_item(url, user, library, connector_identifier, options = {})
+        # input check
+        return nil if user.nil? || library.nil? || connector_identifier.nil? || connector(connector_identifier).nil?
+
+        # connector container
+        connector = connector(connector_identifier).new(url, options)
+
+        # item container
+        item = nil
+
+        # recognize type
+        case connector.type
+          when :video
+            # create specific item
+            item = Narra::Video.new(name: connector.name.downcase, url: url, library: library)
+            # push specific metadata
+            item.meta << Narra::MetaItem.new(name: 'type', value: :video, generator: :source)
+          when :image
+            # create specific item
+            item = Narra::Image.new(name: connector.name.downcase, url: url, library: library)
+            # push specific metadata
+            item.meta << Narra::MetaItem.new(name: 'type', value: :image, generator: :source)
+          when :audio
+            # create specific item
+            item = Narra::Audio.new(name: connector.name.downcase, url: url, library: library)
+            # push specific metadata
+            item.meta << Narra::MetaItem.new(name: 'type', value: :audio, generator: :source)
+          when :text
+            # create specific item
+            item = Narra::Text.new(name: connector.name.downcase, url: url, library: library)
+            # push specific metadata
+            item.meta << Narra::MetaItem.new(name: 'type', value: :text, generator: :source)
+        end
+
+        # create source metadata from essential fields
+        item.meta << Narra::MetaItem.new(name: 'name', value: connector.name.downcase, generator: :source)
+        item.meta << Narra::MetaItem.new(name: 'url', value: url, generator: :source)
+        item.meta << Narra::MetaItem.new(name: 'library', value: library.name, generator: :source)
+        item.meta << Narra::MetaItem.new(name: 'connector', value: connector_identifier.to_s, generator: :source)
+
+        # parse metadata from connector if exists
+        connector.metadata.each do |meta|
+          if !meta[:name].nil? and !meta[:value].nil?
+            item.meta << Narra::MetaItem.new(name: meta[:name], value: meta[:value], generator: connector_identifier)
+          end
+        end
+
+        # parse metadata form the user input if exists
+        if options[:user_metadata]
+          options[:user_metadata].each do |meta|
+            item.meta << Narra::MetaItem.new(name: meta[:name], value: meta[:value], generator: :user, author: user)
+          end
+        end
+
+        # save item
+        item.save!
+
+        # check for author and if not exists add current one
+        if item.meta.where(name: 'author').empty?
+          item.meta << Narra::MetaItem.new(name: 'author', value: user.name, generator: :user, author: user)
+          item.save!
+        end
+
+        # start transcode process
+        unless item.type == :text
+          process(type: :transcoder, item: item._id.to_s, identifier: connector.download_url)
+        end
+
+        # return item
+        return item
+      end
+    end
+  end
+end
