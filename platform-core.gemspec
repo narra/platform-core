@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
   spec.summary     = "NARRA Platform Core functionality"
   spec.description = "NARRA Platform Core functionality which covers all the NARRA data model, logic and SPI."
   spec.license     = "GPL-3.0"
+  spec.metadata    = { "narra" => "module" }
 
   spec.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
   spec.test_files = Dir["spec/**/*"]
@@ -42,6 +43,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mongoid"
   spec.add_dependency "aasm"
   spec.add_dependency "sidekiq"
+  spec.add_dependency "sidekiq-scheduler"
   spec.add_dependency "redis-namespace"
   spec.add_dependency "activesupport"
   spec.add_dependency "fog-aws"

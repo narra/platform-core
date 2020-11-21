@@ -22,7 +22,7 @@
 module Narra
   class MetaSequence < Meta
     # Relations
-    belongs_to :sequence, autosave: true, inverse_of: :meta, class_name: 'Narra::Sequence'
+    belongs_to :sequence, inverse_of: :meta, class_name: 'Narra::Sequence'
 
     # Validations
     validates_uniqueness_of :name, :scope => [:sequence_id]

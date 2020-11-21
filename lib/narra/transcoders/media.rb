@@ -46,7 +46,7 @@ module Narra
 
       def transcode_video(format, options={})
         @format = format
-        @options = Narra::Tools::FfmpegOptions.new(format, options)
+        @options = CarrierWave::Video::FfmpegOptions.new(format, options)
 
         manipulate! do |movie, temporary, success|
           if options[:videoinfo]
@@ -72,7 +72,7 @@ module Narra
 
       def transcode_audio(format, options={})
         @format = format
-        @options = Narra::Tools::FfmpegOptions.new(format, options)
+        @options = CarrierWave::Video::FfmpegOptions.new(format, options)
 
         manipulate! do |movie, temporary, success|
           unless movie.audio_stream.nil?
@@ -114,8 +114,8 @@ module Narra
             end
           end
         rescue => e
-          log_error('transcoder#media') {e.message}
-          log_error('transcoder#media') {e.backtrace.join("\n")}
+          log_error(e.message)
+          log_error(e.backtrace.join("\n"))
         end
       end
 

@@ -25,8 +25,12 @@ module Narra
 
       # Purge library and its content
       def Core.purge_library(library)
-        # check generators for nil and assign only possible generators
         process(type: :purge, library: library._id.to_s, identifier: :library)
+      end
+
+      # Purge ingests
+      def Core.purge_ingests(timestamp)
+        process(type: :purge, timestamp: timestamp, identifier: :ingest)
       end
     end
   end

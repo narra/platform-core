@@ -22,7 +22,7 @@
 module Narra
   class MetaScenario < Meta
     # Relations
-    belongs_to :scenario, autosave: true, inverse_of: :meta, class_name: 'Narra::Scenario'
+    belongs_to :scenario, inverse_of: :meta, class_name: 'Narra::Scenario'
 
     # Validations
     validates_uniqueness_of :name, :scope => [:scenario_id]

@@ -51,6 +51,9 @@ module Narra
         else
           sequence.update_attributes(prepared: true)
         end
+
+        # return sequence
+        return sequence
       end
     end
   end

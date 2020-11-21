@@ -24,6 +24,7 @@ module Narra
     include Mongoid::Document
     include Mongoid::Timestamps
     include Wisper::Publisher
+    include Narra::Extensions::Meta
     include Narra::Extensions::Shared
 
     # Fields
@@ -34,7 +35,7 @@ module Narra
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :scenario, class_name: 'Narra::MetaScenario'
 
     # User Relations
-    belongs_to :author, autosave: true, inverse_of: :scenario, class_name: 'Narra::User'
+    belongs_to :author, inverse_of: :scenario, class_name: 'Narra::User'
 
     # Validations
     validates_presence_of :name
@@ -44,6 +45,10 @@ module Narra
 
     def type
       _type.split('::').last.downcase.sub('scenario', '').to_sym
+    end
+
+    def models
+      [self]
     end
 
     def model

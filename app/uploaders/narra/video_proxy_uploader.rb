@@ -38,7 +38,7 @@ module Narra
 
     version :audio do
       # generate audio proxy
-      process transcode_audio: [Narra::Tools::Settings.audio_proxy_extension.to_sym, audio_bitrate: Narra::Tools::Settings.audio_proxy_bitrate, custom: '-vn',  type: :audio]
+      process transcode_audio: [Narra::Tools::Settings.audio_proxy_extension.to_sym, audio_bitrate: Narra::Tools::Settings.audio_proxy_bitrate, custom: ['-vn'],  type: :audio]
       # change filename extension
       def full_filename(for_file)
         "#{File.basename(for_file, File.extname(for_file))}_#{version_name}.#{Narra::Tools::Settings.audio_proxy_extension}"

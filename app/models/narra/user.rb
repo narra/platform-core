@@ -34,11 +34,11 @@ module Narra
     field :roles, type: Array, default: []
 
     # Project Relations
-    has_many :projects, autosave: true, inverse_of: :author, class_name: 'Narra::Project'
-    has_and_belongs_to_many :projects_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Project'
+    has_many :projects, inverse_of: :author, class_name: 'Narra::Project'
+    has_and_belongs_to_many :projects_contributions, inverse_of: :contributors, class_name: 'Narra::Project'
 
     # Library Relations
-    has_many :libraries, autosave: true, inverse_of: :author, class_name: 'Narra::Library'
+    has_many :libraries, inverse_of: :author, class_name: 'Narra::Library'
     has_and_belongs_to_many :libraries_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Project'
 
     # Sequence Relations
@@ -49,13 +49,10 @@ module Narra
     has_many :meta, autosave: true, inverse_of: :author, class_name: 'Narra::Meta'
 
     # Meta Relations
-    has_many :scenarios, autosave: true, inverse_of: :author, class_name: 'Narra::Scenario'
+    has_many :scenarios, inverse_of: :author, class_name: 'Narra::Scenario'
 
     # Identity Relations
     has_many :identities, dependent: :destroy, class_name: 'Narra::Identity'
-
-    # ingest Relations
-    has_many :ingests, dependent: :destroy, class_name: 'Narra::Ingest'
 
     # Validations
     validates_uniqueness_of :username

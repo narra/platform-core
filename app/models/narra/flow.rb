@@ -29,10 +29,10 @@ module Narra
     field :name, type: String
 
     # User Relations
-    belongs_to :author, autosave: true, inverse_of: :flows, class_name: 'Narra::User'
+    belongs_to :author, inverse_of: :flows, class_name: 'Narra::User'
 
     # Projects Relations
-    belongs_to :project, autosave: true, inverse_of: :flows, class_name: 'Narra::Project'
+    belongs_to :project, inverse_of: :flows, class_name: 'Narra::Project'
 
     # Marks
     has_many :marks, autosave: true, dependent: :destroy, inverse_of: :flow, class_name: 'Narra::MarkFlow'

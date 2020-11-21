@@ -33,18 +33,14 @@ module Narra
         config.fog_provider = 'fog/aws'
         config.fog_credentials = {
             provider: 'AWS',
-            aws_access_key_id: 'minio',
-            aws_secret_access_key: 'minio123',
+            aws_access_key_id: ENV['MINIO_ACCESS_KEY'],
+            aws_secret_access_key: ENV['MINIO_SECRET_KEY'],
             region: 'us-east-1',
             host: 'storage',
-            endpoint: 'http://storage:9000/',
+            endpoint: "http://#{(ENV['NARRA_STORAGE_HOSTNAME'] ||= 'test')}",
             path_style: true
         }
         config.fog_directory  = 'narra'
-      end
-
-      def url(url)
-        url.sub("storage:9000/", (ENV['NARRA_STORAGE_HOSTNAME'] ||= 'test'))
       end
     end
   end

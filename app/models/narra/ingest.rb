@@ -24,10 +24,13 @@ module Narra
     include Mongoid::Document
     include Mongoid::Timestamps
 
+    # fields
+    field :name, type: String
+
     # define ingest file object
     mount_uploader :file, Narra::IngestUploader
 
-    # User relations
-    belongs_to :user, class_name: 'Narra::User'
+    # item relation
+    has_many :items, class_name: 'Narra::Item'
   end
 end

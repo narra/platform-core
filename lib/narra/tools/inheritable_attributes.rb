@@ -31,9 +31,7 @@ module Narra
           @inheritable_attributes ||= []
           @inheritable_attributes += args
           args.each do |arg|
-            class_eval %(
-              class << self; attr_accessor :#{arg} end
-             )
+            class_eval %( class << self; attr_accessor :#{arg} end )
           end
           @inheritable_attributes
         end

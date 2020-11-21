@@ -31,42 +31,21 @@ module Narra
       @description = 'Direct Video Connector uses direct http links to files'
       @priority = 0
 
-      def self.valid?(url)
-        url.start_with?('http://') and (url.end_with?('.webm') or url.end_with?('.mp4') or url.end_with?('.mov'))
+      def self.valid?(source_url)
+        source_url.start_with?('http://') and (source_url.end_with?('.webm') or source_url.end_with?('.mp4') or source_url.end_with?('.mov'))
       end
 
-      def self.resolve(url)
-        uri = URI.parse(url)
-        name = File.basename(uri.path).split('.').first
+      def self.resolve(source_url)
+        download_url = URI.parse(source_url)
+        name = URI.decode(File.basename(download_url.path).split('.').first)
 
         # return proxies
-        [{
-            url: url,
-            name: name,
-            thumbnail: nil,
-            type: :video,
-            connector: @identifier,
-            @identifier => {
-                type: :video,
-                name: name
-            }
-        }]
+        [Narra::Tools::Proxy.default(name, :video, source_url, download_url, @identifier, [], {library:'Super Test'})]
       end
 
-      def name
-        @options[:name]
-      end
-
-      def type
-        :video
-      end
-
-      def metadata
-        []
-      end
-
-      def download_url
-        @url
+      def process
+        # set up
+        @download_url = @proxy.download_url
       end
     end
   end

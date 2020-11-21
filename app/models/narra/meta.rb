@@ -31,9 +31,9 @@ module Narra
     field :public, type: Boolean, default: true
 
     # User Relations
-    belongs_to :author, autosave: true, inverse_of: :meta, class_name: 'Narra::User'
+    belongs_to :author, class_name: 'Narra::User'
 
     # Validations
-    validates_presence_of :name, :value
+    validates_presence_of :name
   end
 end

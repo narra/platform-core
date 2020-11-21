@@ -31,26 +31,27 @@ module Narra
     field :name, type: String
     field :title, type: String
     field :description, type: String
+    field :thumbnails, type: Array, default: []
 
     # Meta Relations
-    has_many :meta, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::MetaProject'
+    embeds_many :meta, inverse_of: :project, class_name: 'Narra::MetaProject'
 
     # User Relations
-    belongs_to :author, autosave: true, inverse_of: :projects, class_name: 'Narra::User'
-    has_and_belongs_to_many :contributors, autosave: true, inverse_of: :projects_contributions, class_name: 'Narra::User'
+    belongs_to :author, inverse_of: :projects, class_name: 'Narra::User'
+    has_and_belongs_to_many :contributors, inverse_of: :projects_contributions, class_name: 'Narra::User'
 
     # Library Relations
-    has_and_belongs_to_many :libraries, autosave: true, inverse_of: :projects, class_name: 'Narra::Library'
+    has_and_belongs_to_many :libraries, inverse_of: :projects, index: true, class_name: 'Narra::Library'
 
     # Junction Relations
-    has_many :junctions, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Junction'
+    has_many :junctions, autosave: true, dependent: :destroy, class_name: 'Narra::Junction'
     has_many :flows, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Flow'
 
     # Event Relations
     has_many :events, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Event'
 
     # Scenario Relations
-    belongs_to :scenario, autosave: true, inverse_of: :projects, class_name: 'Narra::ScenarioProject'
+    belongs_to :scenario, inverse_of: :projects, class_name: 'Narra::ScenarioProject'
 
     # Scopes
     scope :user, ->(user) { any_of({contributor_ids: user._id}, {author_id: user._id}) }

@@ -26,7 +26,7 @@ module Narra
     field :synthesizers, type: Array, default: []
 
     # Relations
-    has_many :projects, autosave: true, inverse_of: :scenario, class_name: 'Narra::Project'
+    has_many :projects, inverse_of: :scenario, class_name: 'Narra::Project'
 
     # Validations
     validates_uniqueness_of :name

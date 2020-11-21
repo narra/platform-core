@@ -25,7 +25,7 @@ module Narra
 
       # return default logger
       def self.default_logger
-        @logger ||= ::Logger.new STDOUT
+        @logger ||= Rails.logger
       end
 
       protected
@@ -34,16 +34,16 @@ module Narra
         Narra::Tools::Logger.default_logger
       end
 
-      def log_info(progname = nil, &block)
-        logger.info(progname, &block)
+      def log_info(message)
+        logger.info(message)
       end
 
-      def log_error(progname = nil, &block)
-        logger.error(progname, &block)
+      def log_error(message)
+        logger.error(message)
       end
 
-      def log_debug(progname = nil, &block)
-        logger.debug(progname, &block)
+      def log_debug(message)
+        logger.debug(message)
       end
     end
   end

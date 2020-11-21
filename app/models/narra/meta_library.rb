@@ -22,7 +22,7 @@
 module Narra
   class MetaLibrary < Meta
     # Relations
-    belongs_to :library, autosave: true, inverse_of: :meta, class_name: 'Narra::Library'
+    embedded_in :library, inverse_of: :meta, class_name: 'Narra::Library'
 
     # Validations
     validates_uniqueness_of :name, :scope => [:library_id]

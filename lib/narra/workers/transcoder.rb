@@ -49,10 +49,22 @@ module Narra
           # push event
           listener.event = @event
 
+          # Prepare file for transcode
+          if item.ingest
+            # It's already downloaded and cached as the ingest
+            temporary = item.ingest
+          else
+            # It has to be downloaded
+            # - not using remote_{key}_url method as a workaround
+            #   to an issue when after save the key was still nil
+            # - it's not ideal but works for now
+            temporary = CarrierWave::SanitizedFile.new(CarrierWave::Downloader::Base.new(nil).download(options['identifier'], {}))
+          end
+
           # Temporary subscribe listener
           Wisper.subscribe(listener) do
             # process transcoder
-            item.send("remote_#{item.type}_url=".to_sym, options['identifier'])
+            item.send("#{item.type}=".to_sym, temporary.file)
           end
 
           # save item

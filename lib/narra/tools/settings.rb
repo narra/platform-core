@@ -34,7 +34,7 @@ module Narra
 
       self.defaults = Narra::Tools::DefaultsHash.new
 
-      # read cache to eliminate acces to the db
+      # read cache to eliminate access to the db
       cattr_accessor :cache
       self.cache = ActiveSupport::Cache::NullStore.new
 

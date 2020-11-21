@@ -32,61 +32,44 @@ module Narra
       include Narra::Tools::InheritableAttributes
 
       inheritable_attributes :identifier, :title, :description, :priority
+      attr_reader :proxy, :metadata, :source_url, :download_url
 
-      # Default values
+      # Connector default values
       @identifier = :generic
       @title = 'Generic'
       @description = 'Generic Connector'
       @priority = 42
 
       # Generic constructor to store an item to be processed
-      def initialize(url, options = {})
-        @url = url
-        @options = options
-        # connector specific initialization
-        initialization
+      def initialize(proxy = Narra::Tools::Proxy.empty)
+        @source_url = proxy.source_url
+        @proxy = proxy
+        @metadata = []
+        # connector specific processing
+        process
       end
 
       #
       # Should be overridden and implemented
       #
 
-      def source_url
-        @url
-      end
-
-      def self.valid?(url)
-        # Nothing to do
+      def self.valid?(source_url)
+        # Validates url if it's suitable for this connector
+        # Nothing to do here
         # This has to be overridden in descendants
       end
 
-      def self.resolve(url)
-        # Nothing to do
+      def self.resolve(source_url)
+        # Resolves url for concrete items and create proxy items
+        # This can processes multiple items
+        # Nothing to do here
         # This has to be overridden in descendants
       end
 
-      def initialization
-        # Nothing to do
-        # This has to be overridden in descendants
-      end
-
-      def name
-        # Nothing to do
-        # This has to be overridden in descendants
-      end
-
-      def type
-        # Nothing to do
-        # This has to be overridden in descendants
-      end
-
-      def metadata
-        # Nothing to do
-        # This has to be overridden in descendants
-      end
-
-      def download_url
-        # Nothing to do
+      def process
+        # Processes proxy item into regular one
+        # This processes only one item
+        # Nothing to do here
         # This has to be overridden in descendants
       end
     end

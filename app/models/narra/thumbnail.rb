@@ -28,6 +28,8 @@ module Narra
 
     field :random, type: Float, default: Proc.new { Random.rand }
 
+    belongs_to :item, inverse_of: :_thumbnails, class_name: 'Narra::Item'
+
     mount_uploader :file, Narra::ThumbnailUploader
   end
 end

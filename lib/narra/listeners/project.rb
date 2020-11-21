@@ -46,7 +46,7 @@ module Narra
             end
 
             # log
-            log_info('listener#project') {'Project ' + project.name + ' scenario updated.'}
+            log_info('Project ' + project.name + ' scenario updated.')
           end
         end
       end

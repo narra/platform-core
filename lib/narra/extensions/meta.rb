@@ -38,25 +38,10 @@ module Narra
             return
           end
         end
-        # get meta class
-        base = model.respond_to?('_type') && model._type == 'Narra::Sequence' ? model._type : model.class.superclass.to_s == 'Object' ? model.class : model.class.superclass
-        # push new meta entry
-        meta = "Narra::Meta#{base.to_s.split('::').last}".constantize.new(options)
-        # process marks
-        if options[:marks]
-          # get marks
-          marks = options[:marks].nil? ? [] : options.delete(:marks)
-          # push marks
-          marks.each do |mark|
-            meta.marks << Narra::MarkMeta.new(mark)
-          end
-        end
-        # check for existence
-        check = get_meta(name: options[:name], generator: options[:generator])
-        # push meta into an item if check nil
-        if check.nil?
-          model.meta << meta
-          # save item
+        # create meta if model supports
+        if model.respond_to?('meta')
+          meta = model.meta.new(options)
+          # autosave
           model.save if autosave
           # return new meta
           return meta
@@ -77,16 +62,6 @@ module Narra
           meta.update_attributes(generator: options[:new_generator]) unless options[:new_generator].nil?
           # check for author field
           meta.update_attributes(author: options[:author]) unless options[:author].nil?
-          # update marks
-          if options[:marks]
-            marks = []
-            # prepare marks
-            options[:marks].each do |mark|
-              marks << Narra::MarkMeta.new(mark)
-            end
-            # update
-            meta.update_attributes(marks: marks)
-          end
         end
         # return meta
         meta
@@ -99,11 +74,9 @@ module Narra
 
       def self.get_meta(model, options)
         # check for model
-        return nil if model.nil?
+        return nil if model.nil? and !model.respond_to?('meta')
         # do a query
-        result = model.meta.where(options)
-        # check and return
-        result.empty? ? nil : (result.count > 1 ? result : result.first)
+        model.meta.find_by(options)
       end
     end
   end

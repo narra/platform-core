@@ -26,7 +26,7 @@ module Narra
     field :clip, type: String
 
     # Relations
-    belongs_to :flow, autosave: true, inverse_of: :marks, class_name: 'Narra::Flow'
+    belongs_to :flow, inverse_of: :marks, class_name: 'Narra::Flow'
 
     # Validations
     validates_uniqueness_of :row, scope: [:flow_id]

@@ -26,7 +26,7 @@ module Narra
     field :generators, type: Array, default: []
 
     # Relations
-    has_many :libraries, autosave: true, inverse_of: :scenario, class_name: 'Narra::Library'
+    has_many :libraries, class_name: 'Narra::Library'
 
     # Validations
     validates_uniqueness_of :name

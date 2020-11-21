@@ -23,11 +23,11 @@ module Narra
   class IngestUploader < Narra::BaseUploader
 
     def filename
-      original_filename
+      model.name
     end
 
     def store_dir
-      Narra::Storage::NAME + "/user/#{model.user.username}/ingest/"
+      Narra::Storage::NAME + "/ingest/#{model._id}/"
     end
   end
 end

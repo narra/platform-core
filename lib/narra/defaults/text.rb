@@ -19,4 +19,18 @@
 # Authors: Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
 #
 
-Mongoid::Config.belongs_to_required_by_default = false
+module Narra
+  module Defaults
+    class Text < Narra::SPI::Default
+
+      # Default values
+      @identifier = :text
+
+      def self.settings
+        {
+            text_preview_length: '100'
+        }
+      end
+    end
+  end
+end

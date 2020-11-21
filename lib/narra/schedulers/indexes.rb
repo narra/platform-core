@@ -20,8 +20,19 @@
 #
 
 module Narra
-  class ThumbnailVisualization < Thumbnail
-    # Visualization Relations
-    belongs_to :visualization, autosave: true, inverse_of: :thumbnails, class_name: 'Narra::Visualization'
+  module Schedulers
+    class Indexes < Narra::SPI::Scheduler
+
+      @identifier = :indexes
+      @title = 'Database Indexer'
+      @description = 'Creating database indexes'
+      @interval = '60m'
+
+      def perform
+        Narra::Item.create_indexes
+        Narra::Library.create_indexes
+        Narra::Project.create_indexes
+      end
+    end
   end
 end

@@ -34,10 +34,10 @@ module Narra
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :sequence, class_name: 'Narra::MetaSequence'
 
     # User Relations
-    has_and_belongs_to_many :contributors, autosave: true, inverse_of: :sequences_contributions, class_name: 'Narra::User'
+    has_and_belongs_to_many :contributors, inverse_of: :sequences_contributions, class_name: 'Narra::User'
 
     # Item Relations
-    has_one :master, inverse_of: :sequence, class_name: 'Narra::Item'
+    has_one :master, class_name: 'Narra::Item'
 
     # Callbacks
     after_destroy :broadcast_events_destroyed

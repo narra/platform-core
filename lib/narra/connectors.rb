@@ -19,12 +19,7 @@
 # Authors: Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
 #
 
-require 'narra/connectors/direct_audio'
-require 'narra/connectors/direct_image'
 require 'narra/connectors/direct_video'
-
-require 'narra/connectors/archive_org'
-require 'narra/connectors/mediawiki'
 
 module Narra
   module Connectors

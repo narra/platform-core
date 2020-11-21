@@ -26,7 +26,6 @@ module Narra
   module Storage
     NAME = 'narra-' + (ENV['NARRA_INSTANCE_NAME'] ||= 'testing') + '-storage'
     SELECTED = Narra::Storages::Local
-    INSTANCE = nil
   end
 end
 

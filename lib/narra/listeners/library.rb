@@ -31,7 +31,7 @@ module Narra
           # run new generators over all items from the library
           Narra::Item.generate(library.items)
           # log
-          log_info('listener#library') {'Library ' + library.name + '#' + library._id.to_s + 'scenario updated.'}
+          log_info('Library ' + library.name + '#' + library._id.to_s + 'scenario updated.')
         end
       end
     end

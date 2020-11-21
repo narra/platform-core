@@ -29,24 +29,28 @@ module Narra
     # Fields
     field :name, type: String
     field :url, type: String
+    field :thumbnails, type: Array, default: []
 
     # Library Relations
-    belongs_to :library, autosave: true, inverse_of: :items, class_name: 'Narra::Library'
+    belongs_to :library, class_name: 'Narra::Library'
 
     # Sequence Relations
-    belongs_to :sequence, autosave: true, inverse_of: :master, class_name: 'Narra::Sequence'
+    belongs_to :sequence, inverse_of: :master, class_name: 'Narra::Sequence'
+
+    # Ingest Relations
+    belongs_to :ingest, class_name: 'Narra::Ingest'
 
     # Meta Relations
-    has_many :meta, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::MetaItem'
+    embeds_many :meta, inverse_of: :item, class_name: 'Narra::MetaItem'
 
     # Junction Relations
-    has_and_belongs_to_many :junctions, autosave: true, dependent: :destroy, inverse_of: :items, class_name: 'Narra::Junction'
+    has_and_belongs_to_many :junctions, autosave: true, dependent: :destroy, class_name: 'Narra::Junction'
 
     # Event Relations
-    has_many :events, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::Event'
+    has_many :events, dependent: :destroy, class_name: 'Narra::Event'
 
     # Thumbnail Relations
-    has_many :thumbnails, autosave: true, dependent: :destroy, inverse_of: :item, class_name: 'Narra::ThumbnailItem'
+    has_many :_thumbnails, autosave: true, dependent: :destroy, class_name: 'Narra::Thumbnail'
 
     # Validations
     validates_uniqueness_of :name, scope: :library_id

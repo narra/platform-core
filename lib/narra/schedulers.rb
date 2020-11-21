@@ -19,9 +19,12 @@
 # Authors: Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
 #
 
+require 'narra/schedulers/indexes'
+require 'narra/schedulers/ingests'
+require 'narra/schedulers/thumbnails'
+
 module Narra
-  class ThumbnailItem < Thumbnail
-    # Item Relations
-    belongs_to :item, inverse_of: :thumbnails, class_name: 'Narra::Item'
+  module Schedulers
+
   end
 end

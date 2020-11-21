@@ -28,8 +28,8 @@ module Narra
 
       def self.settings
         {
-            ffmpeg_binary: '/opt/ffmpeg-static/bin/ffmpeg',
-            ffprobe_binary: '/opt/ffmpeg-static/bin/ffprobe'
+            ffmpeg_binary: '/usr/bin/ffmpeg',
+            ffprobe_binary: '/usr/bin/ffprobe'
         }
       end
     end

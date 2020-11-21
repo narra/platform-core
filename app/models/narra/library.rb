@@ -31,25 +31,26 @@ module Narra
     field :name, type: String
     field :description, type: String
     field :purged, type: Boolean, default: false
+    field :thumbnails, type: Array, default: []
 
     # Meta Relations
-    has_many :meta, autosave: true, dependent: :destroy, inverse_of: :library, class_name: 'Narra::MetaLibrary'
+    embeds_many :meta, class_name: 'Narra::MetaLibrary'
 
     # User Relations
-    belongs_to :author, autosave: true, inverse_of: :projects, class_name: 'Narra::User'
-    has_and_belongs_to_many :contributors, autosave: true, inverse_of: :libraries_contributions, class_name: 'Narra::User'
+    belongs_to :author, inverse_of: :libraries, class_name: 'Narra::User'
+    has_and_belongs_to_many :contributors, inverse_of: :libraries_contributions, class_name: 'Narra::User'
 
     # Item Relations
     has_many :items, autosave: true, dependent: :destroy, inverse_of: :library, class_name: 'Narra::Item'
 
     # Project Relations
-    has_and_belongs_to_many :projects, autosave: true,inverse_of: :libraries, class_name: 'Narra::Project'
+    has_and_belongs_to_many :projects, inverse_of: :libraries, index: true, class_name: 'Narra::Project'
 
     # Event Relations
     has_many :events, autosave: true, dependent: :destroy, inverse_of: :library, class_name: 'Narra::Event'
 
     # Scenario Relations
-    belongs_to :scenario, autosave: true, inverse_of: :libraries, class_name: 'Narra::ScenarioLibrary'
+    belongs_to :scenario, inverse_of: :libraries, class_name: 'Narra::ScenarioLibrary'
 
     # Scopes
     scope :user, ->(user) { any_of({contributor_ids:user._id}, {author_id: user._id}) }

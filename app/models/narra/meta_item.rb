@@ -21,12 +21,15 @@
 
 module Narra
   class MetaItem < Meta
-    # Fields
+    # Generator
     field :generator, type: Symbol
 
+    # In / Out
+    field :input, type: Float
+    field :output, type: Float
+
     # Relations
-    belongs_to :item, autosave: true, inverse_of: :meta, class_name: 'Narra::Item'
-    has_many :marks, autosave: true, dependent: :destroy, inverse_of: :meta, class_name: 'Narra::MarkMeta'
+    embedded_in :item, inverse_of: :meta, class_name: 'Narra::Item'
 
     # Validations
     validates_uniqueness_of :name, :scope => [:generator, :item_id]

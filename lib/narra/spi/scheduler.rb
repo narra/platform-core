@@ -19,18 +19,30 @@
 # Authors: Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
 #
 
+require 'sidekiq-scheduler'
+require 'narra/extensions'
+require 'narra/tools'
+
 module Narra
-  module Defaults
-    class RSA < Narra::SPI::Default
+  module SPI
+    # Generic template for scheduler
+    class Scheduler
+      include Sidekiq::Worker
+      include Narra::Extensions::Class
+      include Narra::Tools::Logger
+      include Narra::Tools::InheritableAttributes
+
+      inheritable_attributes :identifier, :title, :description, :interval
 
       # Default values
-      @identifier = :rsa
+      @identifier = :generic
+      @title = 'Generic'
+      @description = 'Generic Scheduler'
+      @interval = '10s'
 
-      def self.settings
-        {
-            rsa_private: '',
-            rsa_public: ''
-        }
+      def perform
+        # Nothing to do
+        # This has to be overridden in descendants
       end
     end
   end

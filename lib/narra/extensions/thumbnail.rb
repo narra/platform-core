@@ -29,7 +29,7 @@ module Narra
 
       def url_thumbnails
         # get thumbnail if not resolved yet
-        @url_thumbnails ||= Narra::Thumbnail.any_in(item_id: self.models.collect {|model| model._id}).order_by(:random => 'asc').limit(Narra::Tools::Settings.thumbnail_count.to_i).collect { |thumbnail| thumbnail.file.url }
+        self.thumbnails
       end
     end
   end

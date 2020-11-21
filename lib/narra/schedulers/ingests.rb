@@ -20,11 +20,17 @@
 #
 
 module Narra
-  class MetaVisualization < Meta
-    # Relations
-    belongs_to :visualization, autosave: true, inverse_of: :meta, class_name: 'Narra::Visualization'
+  module Schedulers
+    class Ingests < Narra::SPI::Scheduler
 
-    # Validations
-    validates_uniqueness_of :name, :scope => [:visualization_id]
+      @identifier = :ingests
+      @title = 'Ingests Purger'
+      @description = 'It purges all ingests older than 60 minutes every 60 minutes'
+      @interval = '60m'
+
+      def perform
+        Narra::Core.purge_ingests(60.minutes.ago.to_s)
+      end
+    end
   end
 end

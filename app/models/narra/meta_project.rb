@@ -22,7 +22,7 @@
 module Narra
   class MetaProject < Meta
     # Relations
-    belongs_to :project, autosave: true, inverse_of: :meta, class_name: 'Narra::Project'
+    embedded_in :project, inverse_of: :meta, class_name: 'Narra::Project'
 
     # Validations
     validates_uniqueness_of :name, :scope => [:project_id]

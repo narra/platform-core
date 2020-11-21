@@ -28,6 +28,7 @@ require 'narra/synthesizers'
 require 'narra/workers'
 require 'narra/transcoders'
 require 'narra/connectors'
+require 'narra/schedulers'
 
 require 'narra/core/engine'
 require 'narra/core/version'

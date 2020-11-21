@@ -24,6 +24,7 @@ require 'narra/tools/defaults_hash'
 require 'narra/tools/probeable'
 require 'narra/tools/settings'
 require 'narra/tools/logger'
+require 'narra/tools/proxy'
 require 'narra/tools/ffmpeg_options'
 
 module Narra

@@ -31,10 +31,10 @@ module Narra
     field :direction, type: Hash, default: {none: true}
 
     # Project relation
-    belongs_to :project, autosave: true, inverse_of: :junctions, class_name: 'Narra::Project'
+    belongs_to :project, index: true, class_name: 'Narra::Project'
 
     # Item Relations
-    has_and_belongs_to_many :items, autosave: true, inverse_of: :junctions, class_name: 'Narra::Item'
+    has_and_belongs_to_many :items, index: true, class_name: 'Narra::Item'
 
     # Validations
     validates_uniqueness_of :project, scope: [:synthesizer, :direction, :item_ids]

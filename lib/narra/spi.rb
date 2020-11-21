@@ -24,6 +24,7 @@ require 'narra/spi/generator'
 require 'narra/spi/synthesizer'
 require 'narra/spi/storage'
 require 'narra/spi/default'
+require 'narra/spi/scheduler'
 
 module Narra
   module SPI

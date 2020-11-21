@@ -49,6 +49,21 @@ module Narra
               @event.run!
               # destroy library
               library.destroy
+          when :ingest
+              # fire event
+              @event.run!
+              # get timestamp
+              timestamp = Time.parse(options['timestamp'])
+              # log object
+              @object = "older than #{options['timestamp']}"
+              # get ingests older than said and destroy them
+              Narra::Ingest.where(:created_at.lte => timestamp).each do |ingest|
+                # Destroy when it's not used
+                if ingest.items.empty?
+                  logger.info('purge') { ingest.name }
+                  ingest.destroy
+                end
+              end
           end
         rescue => e
           # reset event

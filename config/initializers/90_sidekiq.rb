@@ -20,14 +20,23 @@
 #
 
 require 'sidekiq'
+require 'sidekiq-scheduler'
 
 # load redis config
 redis_config = YAML.load(ERB.new(File.new(Rails.root + 'config/redis.yml').read).result)
 
 Sidekiq.configure_server do |config|
-  config.redis = { :url => "redis://#{redis_config['hostname']}:#{redis_config['port']}/0", :namespace => 'narra' }
+  # Configure Redis connection
+  config.redis = {:url => "redis://#{redis_config['hostname']}:#{redis_config['port']}/0", :namespace => 'narra'}
+  # Load all schedulers
+  config.on(:startup) do
+    Narra::SPI::Scheduler.descendants.each do |scheduler|
+      Sidekiq.set_schedule(scheduler.title, {:class => scheduler, :every => scheduler.interval, :description => scheduler.description, :queue => 'schedulers'})
+    end
+  end
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { :url => "redis://#{redis_config['hostname']}:#{redis_config['port']}/0", :namespace => 'narra' }
+  # Configure Redis connection
+  config.redis = {:url => "redis://#{redis_config['hostname']}:#{redis_config['port']}/0", :namespace => 'narra'}
 end
