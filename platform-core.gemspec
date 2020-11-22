@@ -52,12 +52,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sinatra"
   spec.add_dependency "streamio-ffmpeg"
   spec.add_dependency "logger-better"
-  spec.add_dependency "edl"
   spec.add_dependency "timecode"
   spec.add_dependency "carrierwave-mongoid"
   spec.add_dependency "carrierwave-video"
   spec.add_dependency "mini_magick"
-  spec.add_dependency "mediawiki_api"
   spec.add_dependency "nokogiri"
 
   spec.add_development_dependency "rspec-rails"
