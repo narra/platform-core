@@ -21,7 +21,6 @@
 
 require 'narra/extensions/class'
 require 'narra/extensions/junction'
-require 'narra/extensions/edl'
 require 'narra/extensions/meta'
 require 'narra/extensions/progress'
 require 'narra/extensions/mark'
