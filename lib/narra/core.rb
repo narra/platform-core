@@ -71,8 +71,6 @@ module Narra
           Narra::Workers::Generator.perform_async(options.merge({event: event._id.to_s}))
         when :synthesizer
           Narra::Workers::Synthesizer.perform_async(options.merge({event: event._id.to_s}))
-        when :sequence
-          Narra::Workers::Sequence.perform_async(options.merge({event: event._id.to_s}))
         when :purge
           Narra::Workers::Purge.perform_async(options.merge({event: event._id.to_s}))
       end
