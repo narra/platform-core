@@ -35,10 +35,8 @@ module Narra
         begin
           # get event
           @event = Narra::Event.find(options['event'])
-
           # get identifier
           identifier = options['identifier'].to_sym
-
           case identifier
             when :library
               # get library
@@ -66,10 +64,10 @@ module Narra
                 end
           end
         rescue => e
-          # reset event
-          @event.reset!
           # log
           logger.error('purge#' + options['identifier'] + '#' + @object) { e.to_s }
+          # reset event
+          @event.reset!
           # throw
           raise e
         else

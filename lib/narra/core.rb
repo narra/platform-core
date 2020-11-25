@@ -57,7 +57,7 @@ module Narra
       message += options[:library] unless options[:library].nil?
       message += '::' + options[:identifier].to_s unless options[:type] == :transcoder
       # create an event
-      event = Narra::Event.create(message: message,
+      event = Narra::Event.create!(message: message,
                                   item: options[:item].nil? ? nil : Narra::Item.find(options[:item]),
                                   project: options[:project].nil? ? nil : Narra::Project.find(options[:project]),
                                   library: options[:library].nil? ? nil : Narra::Library.find(options[:library]),
