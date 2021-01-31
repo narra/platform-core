@@ -26,10 +26,10 @@ module Narra
     include Narra::Extensions::Thumbnail
     include Narra::Extensions::Meta
     include Narra::Extensions::Shared
+    include Narra::Extensions::Description
 
     # Fields
     field :name, type: String
-    field :description, type: String
     field :purged, type: Boolean, default: false
     field :thumbnails, type: Array, default: []
 

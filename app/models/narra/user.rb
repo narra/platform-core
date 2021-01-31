@@ -46,9 +46,6 @@ module Narra
     has_and_belongs_to_many :sequences_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Sequence'
 
     # Meta Relations
-    has_many :meta, autosave: true, inverse_of: :author, class_name: 'Narra::Meta'
-
-    # Meta Relations
     has_many :scenarios, inverse_of: :author, class_name: 'Narra::Scenario'
 
     # Identity Relations

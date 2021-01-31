@@ -30,9 +30,6 @@ module Narra
     field :hidden, type: Boolean, default: false
     field :public, type: Boolean, default: true
 
-    # User Relations
-    belongs_to :author, class_name: 'Narra::User'
-
     # Validations
     validates_presence_of :name
   end

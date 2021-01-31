@@ -26,11 +26,11 @@ module Narra
     include Narra::Extensions::Thumbnail
     include Narra::Extensions::Meta
     include Narra::Extensions::Public
+    include Narra::Extensions::Description
 
     # Fields
     field :name, type: String
     field :title, type: String
-    field :description, type: String
     field :thumbnails, type: Array, default: []
 
     # Meta Relations

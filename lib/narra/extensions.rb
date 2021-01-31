@@ -26,6 +26,9 @@ require 'narra/extensions/progress'
 require 'narra/extensions/mark'
 require 'narra/extensions/thumbnail'
 require 'narra/extensions/options'
+require 'narra/extensions/description'
+require 'narra/extensions/public'
+require 'narra/extensions/shared'
 
 module Narra
   module Extensions

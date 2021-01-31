@@ -60,8 +60,6 @@ module Narra
           meta.update_attributes(value: options[:value])
           # check for new generator field
           meta.update_attributes(generator: options[:new_generator]) unless options[:new_generator].nil?
-          # check for author field
-          meta.update_attributes(author: options[:author]) unless options[:author].nil?
         end
         # return meta
         meta
