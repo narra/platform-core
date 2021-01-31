@@ -116,13 +116,13 @@ module Narra
         # parse metadata form the user input if exists
         if connector.proxy.options[:user_metadata]
           connector.proxy.options[:user_metadata].each do |meta|
-            item.meta.new(name: meta[:name], value: meta[:value], generator: :user, author: user)
+            item.meta.new(name: meta[:name], value: meta[:value], generator: :user)
           end
         end
 
         # # check for author and if not exists add current one
         if item.meta.where(name: 'author').empty?
-          item.meta.new(name: 'author', value: user.name, generator: :user, author: user)
+          item.meta.new(name: 'author', value: user.name, generator: :user)
         end
 
         # find if this name already exists
