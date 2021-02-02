@@ -41,7 +41,7 @@ module Narra
     has_and_belongs_to_many :contributors, inverse_of: :libraries_contributions, class_name: 'Narra::User'
 
     # Item Relations
-    has_many :items, autosave: true, dependent: :destroy, inverse_of: :library, class_name: 'Narra::Item'
+    has_many :items, dependent: :destroy, inverse_of: :library, class_name: 'Narra::Item'
 
     # Project Relations
     has_and_belongs_to_many :projects, inverse_of: :libraries, index: true, class_name: 'Narra::Project'

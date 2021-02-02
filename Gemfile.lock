@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    narra-core (0.1.7)
+    narra-core (0.1.8)
       aasm
       activesupport
       carrierwave-mongoid
@@ -96,7 +96,7 @@ GEM
     erubi (1.10.0)
     et-orbi (1.2.4)
       tzinfo
-    excon (0.78.1)
+    excon (0.79.0)
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.1.0)
