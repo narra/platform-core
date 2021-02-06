@@ -24,7 +24,7 @@ module Narra
     class Ingests < Narra::SPI::Scheduler
 
       @identifier = :ingests
-      @title = 'Ingests Purger'
+      @name = 'Ingests Purger'
       @description = 'It purges all ingests older than 60 minutes every 60 minutes'
       @interval = '60m'
 

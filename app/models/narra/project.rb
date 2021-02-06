@@ -27,10 +27,10 @@ module Narra
     include Narra::Extensions::Meta
     include Narra::Extensions::Public
     include Narra::Extensions::Description
+    include Narra::Extensions::Name
 
     # Fields
-    field :name, type: String
-    field :title, type: String
+    field :_id, type: String
     field :thumbnails, type: Array, default: []
 
     # Meta Relations
@@ -57,12 +57,12 @@ module Narra
     scope :user, ->(user) { any_of({contributor_ids: user._id}, {author_id: user._id}) }
 
     # Validations
-    validates_uniqueness_of :name
-    validates_presence_of :name, :title, :author_id, :scenario_id
+    validates_uniqueness_of :id
+    validates_presence_of :id, :author_id, :scenario_id
 
     # Return all project items
     def items
-      Narra::Item.any_in(library_id: self.library_ids)
+      Narra::Item.libraries(self.library_ids)
     end
 
     # Return all author's sequences

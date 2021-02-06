@@ -24,7 +24,7 @@ module Narra
     class Indexes < Narra::SPI::Scheduler
 
       @identifier = :indexes
-      @title = 'Database Indexer'
+      @name = 'Database Indexer'
       @description = 'Creating database indexes'
       @interval = '60m'
 

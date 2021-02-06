@@ -27,9 +27,9 @@ module Narra
     include Narra::Extensions::Meta
     include Narra::Extensions::Shared
     include Narra::Extensions::Description
+    include Narra::Extensions::Name
 
     # Fields
-    field :name, type: String
     field :purged, type: Boolean, default: false
     field :thumbnails, type: Array, default: []
 
@@ -56,8 +56,7 @@ module Narra
     scope :user, ->(user) { any_of({contributor_ids:user._id}, {author_id: user._id}) }
 
     # Validations
-    validates_uniqueness_of :name
-    validates_presence_of :name, :author_id, :scenario_id
+    validates_presence_of :author_id, :scenario_id
 
     # Return as an array
     def models

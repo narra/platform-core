@@ -24,7 +24,7 @@ module Narra
     class Thumbnails < Narra::SPI::Scheduler
 
       @identifier = :thumbnails
-      @title = 'Thumbnails Updater'
+      @name = 'Thumbnails Updater'
       @description = 'It updates thumbnails for project and libraries once per 10 minutes'
       @interval = '10m'
 

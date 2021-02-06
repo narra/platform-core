@@ -26,19 +26,14 @@ module Narra
     include Wisper::Publisher
     include Narra::Extensions::Meta
     include Narra::Extensions::Shared
-
-    # Fields
-    field :name, type: String
-    field :description, type: String
+    include Narra::Extensions::Name
+    include Narra::Extensions::Description
 
     # Meta Relations
     has_many :meta, autosave: true, dependent: :destroy, inverse_of: :scenario, class_name: 'Narra::MetaScenario'
 
     # User Relations
     belongs_to :author, inverse_of: :scenario, class_name: 'Narra::User'
-
-    # Validations
-    validates_presence_of :name
 
     # Hooks
     after_update :broadcast_events

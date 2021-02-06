@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020 narra.eu
+# Copyright (C) 2021 narra.eu
 #
 # This file is part of Narra Platform Core.
 #
@@ -16,11 +16,35 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Platform Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors: Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
+# Authors: Michal Mocnak <michal@narra.eu>
 #
 
 module Narra
-  module Core
-    VERSION = "0.1.9"
+  module Extensions
+    module Name
+      extend ActiveSupport::Concern
+      include Narra::Extensions::Meta
+
+      included do
+        after_create :narra_name_initialize
+      end
+
+      def name
+        # get public meta
+        meta = get_meta(name: 'name')
+        # return
+        meta.nil? ? '' : meta.value
+      end
+
+      def name=(name)
+        self.update_meta(name: 'name', value: name)
+      end
+
+      protected
+
+      def narra_name_initialize
+        self.add_meta(name: 'name', value: '', hidden: false, public: true)
+      end
+    end
   end
 end

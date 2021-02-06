@@ -25,9 +25,9 @@ module Narra
       include Narra::Tools::Logger
 
       def narra_scenario_project_updated(options)
-        options[:projects].each do |project_name|
+        options[:projects].each do |project_id|
           # get project and changes
-          project = Narra::Project.find_by(name: project_name)
+          project = Narra::Project.find(project_id)
           changes = options[:changes]
 
           # process changes
@@ -46,7 +46,7 @@ module Narra
             end
 
             # log
-            log_info('Project ' + project.name + ' scenario updated.')
+            log_info('Project ' + project._id + ' scenario updated.')
           end
         end
       end

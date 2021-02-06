@@ -43,7 +43,6 @@ module Narra
 
     # Sequence Relations
     has_many :flows, autosave: true, inverse_of: :author, class_name: 'Narra::Flow'
-    has_and_belongs_to_many :sequences_contributions, autosave: true, inverse_of: :contributors, class_name: 'Narra::Sequence'
 
     # Meta Relations
     has_many :scenarios, inverse_of: :author, class_name: 'Narra::Scenario'

@@ -47,7 +47,10 @@ module Narra
 
       def create_default_project_scenarios(options)
         # create scenarion
-        scenario = ScenarioProject.create({name: "Empty project scenario", description: "Empty default scenario for projects", author: User.find_by(username: options[:username])})
+        scenario = ScenarioProject.create({author: User.find_by(username: options[:username])})
+        # update name and description
+        scenario.name = "Empty project scenario"
+        scenario.description = "Empty default scenario for projects"
         # make it shared
         scenario.shared = true
         # save
@@ -56,7 +59,10 @@ module Narra
 
       def create_default_library_scenarios(options)
         # create scenarion
-        scenario = ScenarioLibrary.create({name: "Empty library scenario", description: "Empty default scenario for libraries", author: User.find_by(username: options[:username])})
+        scenario = ScenarioLibrary.create({author: User.find_by(username: options[:username])})
+        # update name and description
+        scenario.name = "Empty library scenario"
+        scenario.description = "Empty default scenario for libraries"
         # make it shared
         scenario.shared = true
         # save

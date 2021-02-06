@@ -31,11 +31,11 @@ module Narra
       include Narra::Tools::Logger
       include Narra::Tools::InheritableAttributes
 
-      inheritable_attributes :identifier, :title, :description, :requirements
+      inheritable_attributes :identifier, :name, :description, :requirements
 
       # Default values
       @identifier = :generic
-      @title = 'Generic'
+      @name = 'Generic'
       @description = 'Generic Storage'
       @requirements = []
 

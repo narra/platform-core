@@ -32,11 +32,11 @@ module Narra
       include Narra::Tools::Logger
       include Narra::Tools::InheritableAttributes
 
-      inheritable_attributes :identifier, :title, :description, :interval
+      inheritable_attributes :identifier, :name, :description, :interval
 
       # Default values
       @identifier = :generic
-      @title = 'Generic'
+      @name = 'Generic'
       @description = 'Generic Scheduler'
       @interval = '10s'
 

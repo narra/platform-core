@@ -37,7 +37,7 @@ module Narra
 
       # Default values
       @identifier = :generic
-      @title = 'Generic'
+      @name = 'Generic'
       @description = 'Generic Synthesizer'
       @options = {}
       @dependency = []

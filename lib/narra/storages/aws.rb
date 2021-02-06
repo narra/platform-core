@@ -27,7 +27,7 @@ module Narra
 
       # Default values
       @identifier = :aws
-      @title = 'Amazon AWS Storage'
+      @name = 'Amazon AWS Storage'
       @description = 'Central storage with cloud accessor'
       @requirements = ['AWS_ACCESS_KEY', 'AWS_SECRET', 'AWS_REGION', 'AWS_BUCKET']
 

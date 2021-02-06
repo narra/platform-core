@@ -25,7 +25,7 @@ module Narra
 
       # Default values
       @identifier = :local
-      @title = 'Local Storage'
+      @name = 'Local Storage'
       @description = 'Central storage with minio accessor'
 
       def initialization(config)

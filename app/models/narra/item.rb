@@ -58,6 +58,7 @@ module Narra
 
     # Scopes
     scope :user, ->(user) { any_in(library_id: Library.user(user).pluck(:id)) }
+    scope :libraries, ->(libraries) { any_in(library_id: libraries) }
 
     # Return as an array
     def models

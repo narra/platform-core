@@ -31,12 +31,12 @@ module Narra
       include Narra::Tools::Logger
       include Narra::Tools::InheritableAttributes
 
-      inheritable_attributes :identifier, :title, :description, :priority
+      inheritable_attributes :identifier, :name, :description, :priority
       attr_reader :proxy, :metadata, :source_url, :download_url
 
       # Connector default values
       @identifier = :generic
-      @title = 'Generic'
+      @name = 'Generic'
       @description = 'Generic Connector'
       @priority = 42
 

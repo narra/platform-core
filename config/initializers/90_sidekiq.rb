@@ -31,7 +31,7 @@ Sidekiq.configure_server do |config|
   # Load all schedulers
   config.on(:startup) do
     Narra::SPI::Scheduler.descendants.each do |scheduler|
-      Sidekiq.set_schedule(scheduler.title, {:class => scheduler, :every => scheduler.interval, :description => scheduler.description, :queue => 'schedulers'})
+      Sidekiq.set_schedule(scheduler.name, {:class => scheduler, :every => scheduler.interval, :description => scheduler.description, :queue => 'schedulers'})
     end
   end
 end
