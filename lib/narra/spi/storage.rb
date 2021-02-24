@@ -48,7 +48,7 @@ module Narra
       end
 
       def self.valid?
-        @requirements.reject{|requirement| ENV.has_key?(requirement)}.empty?
+        @requirements.reject{|requirement| ENV.has_key?(requirement) && !ENV[requirement].empty?}.empty?
       end
 
       #
