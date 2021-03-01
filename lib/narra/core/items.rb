@@ -107,7 +107,8 @@ module Narra
             # check for marks
             if !meta[:positions].nil? and !meta[:positions].empty?
               meta[:positions].each do |position|
-                object.input = position.to_f
+                object.input = position[:in] if position[:in]
+                object.output = position[:out] if position[:out]
               end
             end
           end
