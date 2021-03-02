@@ -47,9 +47,9 @@ module Narra
         Narra::Tools::Proxy.new(name, type, source_url, download_url, connector, thumbnails, options)
       end
 
-      # Parse from hash object
+      # Parse from hash object in sidekiq, using strings
       def self.parse(hash)
-        Narra::Tools::Proxy.new(hash[:name], hash[:type].to_sym, hash[:source_url], hash[:download_url], hash[:connector].to_sym, hash[:thumbnails], hash[:options])
+        Narra::Tools::Proxy.new(hash['name'], hash['type'].to_sym, hash['source_url'], hash['download_url'], hash['connector'].to_sym, hash['thumbnails'], hash['options'])
       end
     end
   end

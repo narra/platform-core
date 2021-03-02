@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020 narra.eu
+# Copyright (C) 2021 narra.eu
 #
 # This file is part of Narra Platform Core.
 #
@@ -38,30 +38,50 @@ module Narra
           # get identifier
           identifier = options['identifier'].to_sym
           case identifier
-            when :library
-              # get library
+          when :library
+            # get library
+            library = Narra::Library.find(options['library'])
+            # log object
+            @object = "#{library._id.to_s}|#{library.name}"
+            # fire event
+            @event.run!
+            # destroy library
+            library.destroy
+          when :ingest
+            # get timestamp
+            timestamp = Time.parse(options['timestamp'])
+            # log object
+            @object = "older than #{options['timestamp']}"
+            # fire event
+            @event.run!
+            # get ingests older than said and destroy them
+            Narra::Ingest.where(:created_at.lte => timestamp).each do |ingest|
+              # Destroy when it's not used
+              if ingest.items.empty?
+                logger.info('purge') { ingest.name }
+                ingest.destroy
+              end
+            end
+          when :items
+            # items array
+            items = options['items']
+            # check for library
+            if options['library']
+              # resolve
               library = Narra::Library.find(options['library'])
-              # log object
-              @object = "#{library._id.to_s}|#{library.name}"
-              # fire event
-              @event.run!
-              # destroy library
-              library.destroy
-            when :ingest
-                # fire event
-                @event.run!
-                # get timestamp
-                timestamp = Time.parse(options['timestamp'])
-                # log object
-                @object = "older than #{options['timestamp']}"
-                # get ingests older than said and destroy them
-                Narra::Ingest.where(:created_at.lte => timestamp).each do |ingest|
-                  # Destroy when it's not used
-                  if ingest.items.empty?
-                    logger.info('purge') { ingest.name }
-                    ingest.destroy
-                  end
-                end
+              # update items array to purge
+              items = items.concat(library.item_ids)
+            end
+            # log object
+            @object = "selected items"
+            @object += " and all from library #{library.name}" if library
+            # fire event
+            @event.run!
+            # iterate through items
+            Narra::Item.any_in(_id: items).each do |item|
+              # destroy iten
+              item.destroy
+            end
           end
         rescue => e
           # log

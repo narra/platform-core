@@ -51,11 +51,13 @@ module Narra
 
     def self.process(options)
       # setup message
-      message = 'narra::' + options[:type].to_s + '::'
-      message += options[:item] unless options[:item].nil?
-      message += options[:project] unless options[:project].nil?
-      message += options[:library] unless options[:library].nil?
-      message += '::' + options[:identifier].to_s unless options[:type] == :transcoder
+      message = "narra::#{options[:type].to_s}"
+      message += "::#{options[:item]}" unless options[:item].nil?
+      message += "::#{options[:project]}" unless options[:project].nil?
+      message += "::#{options[:library]}" unless options[:library].nil?
+      message += "::#{options[:user]}" unless options[:user].nil?
+      message += "::items" unless options[:proxies].nil?
+      message += "::#{options[:identifier].to_s}" unless options[:type] == :transcoder
       # create an event
       event = Narra::Event.create!(message: message,
                                   item: options[:item].nil? ? nil : Narra::Item.find(options[:item]),
@@ -65,6 +67,8 @@ module Narra
 
       # process
       case options[:type]
+        when :items
+          Narra::Workers::Items.perform_async(options.merge({event: event._id.to_s}))
         when :transcoder
           Narra::Workers::Transcoder.perform_async(options.merge({event: event._id.to_s}))
         when :generator

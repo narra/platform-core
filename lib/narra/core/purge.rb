@@ -24,8 +24,13 @@ module Narra
     module Purge
 
       # Purge library and its content
-      def Core.purge_library(library)
-        process(type: :purge, library: library._id.to_s, identifier: :library)
+      def Core.purge_library(library_id)
+        process(type: :purge, library: library_id, identifier: :library)
+      end
+
+      # Purge items
+      def Core.purge_items(library_id: nil, items_ids: [])
+        process(type: :purge, library: library_id, items: items_ids, identifier: :items)
       end
 
       # Purge ingests

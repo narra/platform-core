@@ -28,7 +28,7 @@ require "narra/core/version"
 Gem::Specification.new do |spec|
   spec.name        = "narra-core"
   spec.version     = Narra::Core::VERSION
-  spec.authors     = ["Michal Mocnak", "Krystof Pesek", "Petr Pulc"]
+  spec.authors     = ["Michal Mocnak", "Eric Rosenzveig", "Krystof Pesek", "Petr Pulc"]
   spec.email       = ["info@narra.eu"]
   spec.homepage    = "https://www.narra.eu"
   spec.summary     = "NARRA Platform Core functionality"
