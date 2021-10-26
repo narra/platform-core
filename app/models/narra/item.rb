@@ -1,23 +1,6 @@
-#
-# Copyright (C) 2020 narra.eu
-#
-# This file is part of Narra Platform Core.
-#
-# Narra Platform Core is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Narra Platform Core is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Narra Platform Core. If not, see <http://www.gnu.org/licenses/>.
-#
-# Authors: Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
-#
+# Copyright: (c) 2021, Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
+# Copyright: (c) 2021, Narra Project
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 module Narra
   class Item
@@ -29,13 +12,11 @@ module Narra
     # Fields
     field :name, type: String
     field :url, type: String
+    field :connector, type: String
     field :thumbnails, type: Array, default: []
 
     # Library Relations
     belongs_to :library, class_name: 'Narra::Library'
-
-    # Sequence Relations
-    belongs_to :sequence, inverse_of: :master, class_name: 'Narra::Sequence'
 
     # Ingest Relations
     belongs_to :ingest, class_name: 'Narra::Ingest'
@@ -71,11 +52,6 @@ module Narra
 
     def type
       _type.split('::').last.downcase.to_sym
-    end
-
-    # Item is hidden for any process when it is assigned as master of the sequence
-    def master?
-      !sequence.nil?
     end
 
     def prepared?

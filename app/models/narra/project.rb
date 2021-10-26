@@ -1,33 +1,18 @@
-#
-# Copyright (C) 2020 narra.eu
-#
-# This file is part of Narra Platform Core.
-#
-# Narra Platform Core is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Narra Platform Core is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Narra Platform Core. If not, see <http://www.gnu.org/licenses/>.
-#
-# Authors: Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
-#
+# Copyright: (c) 2021, Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
+# Copyright: (c) 2021, Narra Project
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+require 'narra/extensions'
 
 module Narra
   class Project
     include Mongoid::Document
     include Mongoid::Timestamps
     include Narra::Extensions::Thumbnail
-    include Narra::Extensions::Meta
     include Narra::Extensions::Public
     include Narra::Extensions::Description
     include Narra::Extensions::Name
+    include Narra::Extensions::Meta
 
     # Fields
     field :_id, type: String
@@ -37,15 +22,14 @@ module Narra
     embeds_many :meta, inverse_of: :project, class_name: 'Narra::MetaProject'
 
     # User Relations
-    belongs_to :author, inverse_of: :projects, class_name: 'Narra::User'
-    has_and_belongs_to_many :contributors, inverse_of: :projects_contributions, class_name: 'Narra::User'
+    belongs_to :author, inverse_of: :projects, class_name: 'Narra::Auth::User'
+    has_and_belongs_to_many :contributors, inverse_of: :projects_contributions, class_name: 'Narra::Auth::User'
 
     # Library Relations
     has_and_belongs_to_many :libraries, inverse_of: :projects, index: true, class_name: 'Narra::Library'
 
     # Junction Relations
     has_many :junctions, autosave: true, dependent: :destroy, class_name: 'Narra::Junction'
-    has_many :flows, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Flow'
 
     # Event Relations
     has_many :events, autosave: true, dependent: :destroy, inverse_of: :project, class_name: 'Narra::Event'
@@ -63,16 +47,6 @@ module Narra
     # Return all project items
     def items
       Narra::Item.libraries(self.library_ids)
-    end
-
-    # Return all author's sequences
-    def sequences
-      flows.where(_type: 'Narra::Sequence')
-    end
-
-    # Return all users paths
-    def paths
-      flows.where(_type: 'Narra::Path')
     end
 
     # Return as an array

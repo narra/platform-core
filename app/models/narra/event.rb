@@ -1,23 +1,6 @@
-#
-# Copyright (C) 2020 narra.eu
-#
-# This file is part of Narra Platform Core.
-#
-# Narra Platform Core is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Narra Platform Core is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Narra Platform Core. If not, see <http://www.gnu.org/licenses/>.
-#
-# Authors: Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
-#
+# Copyright: (c) 2021, Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
+# Copyright: (c) 2021, Narra Project
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 require 'aasm'
 require 'sidekiq/api'
@@ -44,11 +27,15 @@ module Narra
     # project relation
     belongs_to :library, autosave: true, inverse_of: :events, class_name: 'Narra::Library'
 
+    # user relation
+    belongs_to :owner, autosave: true, inverse_of: :events, class_name: 'Narra::Auth::User'
+
     # Scopes
-    scope :user, ->(user) { Event.or(
-        { :item_id.in => Item.user(user).pluck(:id) },
-        { :library_id.in => Library.user(user).pluck(:id) },
-        { :project_name.in => Project.user(user).pluck(:name) }
+    scope :user, ->(user) { Narra::Event.or(
+        { :owner_id.in => [user._id.to_s] },
+        { :item_id.in => Narra::Item.user(user).pluck(:id) },
+        { :library_id.in => Narra::Library.user(user).pluck(:id) },
+        { :project_name.in => Narra::Project.user(user).pluck(:name) }
     )}
 
     # callbacks

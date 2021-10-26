@@ -1,32 +1,19 @@
-#
-# Copyright (C) 2020 narra.eu
-#
-# This file is part of Narra Platform Core.
-#
-# Narra Platform Core is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Narra Platform Core is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Narra Platform Core. If not, see <http://www.gnu.org/licenses/>.
-#
-# Authors: Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
-#
+# Copyright: (c) 2021, Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
+# Copyright: (c) 2021, Narra Project
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 require 'wisper'
+# workaround to register global listeners from upstream project
+require 'narra/listeners'
 
-# Transcode listener fires generation process on the item
-Wisper.subscribe(Narra::Listeners::Transcoder.new, on: :narra_transcoder_done)
-# Library listener fires generation process on all items from the library
-Wisper.subscribe(Narra::Listeners::Library.new, on: :narra_scenario_library_updated)
-# Project listener fires synthetization process
-Wisper.subscribe(Narra::Listeners::Project.new, on: :narra_scenario_project_updated)
+# Register all global listeners
+Narra::SPI::Listener.descendants.each do |listener|
+  # iterate over events
+  listener.events.each do |event|
+    # each events has separate instance on the listener
+    Wisper.subscribe(listener.new, event)
+  end
+end
 
 # Register all default listeners
 Narra::SPI::Default.descendants.each do |default|
@@ -36,7 +23,6 @@ Narra::SPI::Default.descendants.each do |default|
 end
 
 # Register all synthesizer listeners
-# Not calling Narra::Core directly due to workaround for spec testing
 Narra::SPI::Synthesizer.descendants.each do |synthesizer|
   synthesizer.listeners.each do |listener|
     Wisper.subscribe(listener[:instance], on: listener[:event])

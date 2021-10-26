@@ -1,51 +1,41 @@
-#
-# Copyright (C) 2020 narra.eu
-#
-# This file is part of Narra Platform Core.
-#
-# Narra Platform Core is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Narra Platform Core is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Narra Platform Core. If not, see <http://www.gnu.org/licenses/>.
-#
-# Authors: Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
-#
+# Copyright: (c) 2021, Michal Mocnak <michal@narra.eu>, Eric Rosenzveig <eric@narra.eu>
+# Copyright: (c) 2021, Narra Project
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 require 'narra/extensions'
 require 'narra/tools'
 require 'narra/spi'
-require 'narra/defaults'
-require 'narra/storages'
-require 'narra/workers'
-require 'narra/transcoders'
-require 'narra/schedulers'
 
-require 'narra/core/engine'
-require 'narra/core/version'
+require_relative 'core/logger'
+require_relative 'core/engine'
+require_relative 'core/version'
 
-require 'narra/core/connectors'
-require 'narra/core/generators'
-require 'narra/core/synthesizers'
-require 'narra/core/items'
-require 'narra/core/sequences'
-require 'narra/core/purge'
+require_relative 'core/storages'
+require_relative 'core/listeners'
+require_relative 'core/defaults'
+require_relative 'core/schedulers'
+require_relative 'core/workers'
+require_relative 'core/transcoders'
+require_relative 'core/connectors'
+require_relative 'core/generators'
+require_relative 'core/synthesizers'
+require_relative 'core/actions'
+require_relative 'core/items'
+require_relative 'core/purge'
+require_relative 'core/export'
+require_relative 'core/import'
 
 module Narra
   module Core
+
     include Narra::Core::Connectors
     include Narra::Core::Generators
     include Narra::Core::Synthesizers
+    include Narra::Core::Actions
     include Narra::Core::Items
-    include Narra::Core::Sequences
     include Narra::Core::Purge
+    include Narra::Core::Export
+    include Narra::Core::Import
 
     private
 
@@ -56,29 +46,18 @@ module Narra
       message += "::#{options[:project]}" unless options[:project].nil?
       message += "::#{options[:library]}" unless options[:library].nil?
       message += "::#{options[:user]}" unless options[:user].nil?
-      message += "::items" unless options[:proxies].nil?
-      message += "::#{options[:identifier].to_s}" unless options[:type] == :transcoder
+      message += "::#{options[:identifier].to_s}" unless options[:identifier].nil?
       # create an event
       event = Narra::Event.create!(message: message,
-                                  item: options[:item].nil? ? nil : Narra::Item.find(options[:item]),
-                                  project: options[:project].nil? ? nil : Narra::Project.find(options[:project]),
-                                  library: options[:library].nil? ? nil : Narra::Library.find(options[:library]),
-                                  broadcasts: ['narra_' + options[:type].to_s + '_done'])
-
-      # process
-      case options[:type]
-        when :items
-          Narra::Workers::Items.perform_async(options.merge({event: event._id.to_s}))
-        when :transcoder
-          Narra::Workers::Transcoder.perform_async(options.merge({event: event._id.to_s}))
-        when :generator
-          Narra::Workers::Generator.perform_async(options.merge({event: event._id.to_s}))
-        when :synthesizer
-          Narra::Workers::Synthesizer.perform_async(options.merge({event: event._id.to_s}))
-        when :purge
-          Narra::Workers::Purge.perform_async(options.merge({event: event._id.to_s}))
-      end
-
+                                   item: options[:item].nil? ? nil : Narra::Item.find(options[:item]),
+                                   project: options[:project].nil? ? nil : Narra::Project.find(options[:project]),
+                                   library: options[:library].nil? ? nil : Narra::Library.find(options[:library]),
+                                   owner: options[:user].nil? ? nil : Narra::Auth::User.find(options[:user]),
+                                   broadcasts: ['narra_' + options[:type].to_s + '_done'])
+      # update options
+      options.merge!({ event: event._id.to_s })
+      # get worker class object and process
+      Narra::Extensions::Class.class_from_string("Narra::Core::Workers::#{options[:type].to_s.capitalize}").perform_async(options)
       # return event
       return event
     end
