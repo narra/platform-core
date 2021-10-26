@@ -6,7 +6,7 @@ require 'carrierwave/video'
 
 module Narra
   class VideoProxyUploader < Narra::BaseUploader
-    include Narra::Transcoders::Media
+    include Narra::Core::Transcoders::Media
 
     # set up encoder process to generate proxies
     # process incoming video to hq proxy

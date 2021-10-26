@@ -4,7 +4,7 @@
 
 module Narra
   class AudioProxyUploader < Narra::BaseUploader
-    include Narra::Transcoders::Media
+    include Narra::Core::Transcoders::Media
 
     # set up encoder process to generate proxies
     process transcode_audio: [Narra::Tools::Settings.audio_proxy_extension.to_sym, audio_bitrate: Narra::Tools::Settings.audio_proxy_bitrate, custom: '-vn', videoinfo: true]
