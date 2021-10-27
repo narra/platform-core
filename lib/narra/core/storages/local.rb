@@ -20,7 +20,7 @@ module Narra
             aws_access_key_id: ENV['MINIO_ROOT_USER'],
             aws_secret_access_key: ENV['MINIO_ROOT_PASSWORD'],
             region: 'us-east-1',
-            host: 'http://storage:9000',
+            host: 'storage',
             endpoint: "http://#{(ENV['NARRA_STORAGE_HOSTNAME'] ||= 'test')}",
             path_style: true
           }
