@@ -17,8 +17,8 @@ module Narra
           config.fog_provider = 'fog/aws'
           config.fog_credentials = {
             provider: 'AWS',
-            aws_access_key_id: ENV['MINIO_ROOT_USER'],
-            aws_secret_access_key: ENV['MINIO_ROOT_PASSWORD'],
+            aws_access_key_id: ENV['MINIO_ACCESS_KEY'],
+            aws_secret_access_key: ENV['MINIO_SECRET_KEY'],
             region: 'us-east-1',
             host: 'storage',
             endpoint: "http://#{(ENV['NARRA_STORAGE_HOSTNAME'] ||= 'test')}",
