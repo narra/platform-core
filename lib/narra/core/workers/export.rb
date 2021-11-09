@@ -14,21 +14,27 @@ module Narra
 
         def perform(options)
           # check
-          return if options['project'].nil? || options['event'].nil? || options['return'].nil?
+          return if (options['project'].nil? && options['library'].nil?) || options['event'].nil? || options['return'].nil?
           # perform
           begin
             # get event
             @event = Narra::Event.find(options['event'])
             # fire event
             @event.run!
-            # get project object
-            project = Narra::Project.find(options['project'])
+            # resolve object by type
+            if options['project']
+              # get project
+              object = Narra::Project.find(options['project'])
+            elsif options['library']
+              # get library
+              object = Narra::Library.find(options['library'])
+            end
             # get return object
             return_object = Narra::Return.find(options['return'])
             # prepare data
-            export_data = { project: project.as_json, libraries: project.libraries.as_json, items: project.items.as_json }
+            export_data = { metadata: object.meta.select { |meta| meta.public and meta.name != 'name' }.collect { |meta| { name: meta.name, value: meta.value } }.as_json }
             # save to file
-            return_object.file = Narra::Tools::FileIO.new(export_data.to_json, "#{project._id}.narra")
+            return_object.file = Narra::Tools::FileIO.new(export_data.to_json, "#{object.name.parameterize.underscore}.narra")
             # persiste
             return_object.save!
           rescue => e
@@ -40,7 +46,7 @@ module Narra
             raise e
           else
             # log
-            Narra::Core::LOGGER.log_info("Project #{options['project']} successfully exported", 'export')
+            Narra::Core::LOGGER.log_info("#{object.name} metadata successfully exported", 'export')
             # event done
             @event.done!
           end

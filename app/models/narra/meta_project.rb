@@ -8,6 +8,6 @@ module Narra
     embedded_in :project, inverse_of: :meta, class_name: 'Narra::Project'
 
     # Validations
-    validates_uniqueness_of :name, :scope => [:project_id]
+    validates_uniqueness_of :name, :scope => [:project_identifier]
   end
 end

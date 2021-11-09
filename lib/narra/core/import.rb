@@ -6,8 +6,13 @@ module Narra
   module Core
     module Import
 
-      def Core.import(data, user_id, options = {})
-        process(type: :import, data: data, options: options, user: user_id)
+      def Core.import(object, data, user_id, options = {})
+        # resolve object type
+        if object.is_a?(Narra::Project)
+          process(type: :import, project: object._id.to_s, data: data, options: options, user: user_id)
+        elsif object.is_a?(Narra::Library)
+          process(type: :import, library: object._id.to_s, data: data, options: options, user: user_id)
+        end
       end
     end
   end

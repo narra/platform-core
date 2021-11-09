@@ -6,8 +6,13 @@ module Narra
   module Core
     module Export
 
-      def Core.export(project, return_object, user_id, options = {})
-        process(type: :export, project: project, return: return_object, options: options, user: user_id)
+      def Core.export(object, return_object, user_id, options = {})
+        # resolve object type
+        if object.is_a?(Narra::Project)
+          process(type: :export, project: object._id.to_s, return: return_object, options: options, user: user_id)
+        elsif object.is_a?(Narra::Library)
+          process(type: :export, library: object._id.to_s, return: return_object, options: options, user: user_id)
+        end
       end
     end
   end

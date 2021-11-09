@@ -9,49 +9,45 @@ module Narra
     module Workers
       class Import
         include Sidekiq::Worker
+        include Narra::Extensions::Progress
 
         sidekiq_options :queue => :import
 
         def perform(options)
           # check
-          return if options['data'].nil? || options['event'].nil? || options['return'].nil?
+          return if (options['project'].nil? && options['library'].nil?) || options['data'].nil? || options['event'].nil?
           # perform
           begin
             # get event
             @event = Narra::Event.find(options['event'])
             # fire event
             @event.run!
-            # get action class
-            loaded = JSON.parse(File.read(options['data']))
-            # check if the project exists
-            project = Narra::Project.find(loaded["project"]["_id"])
-            libraries = loaded["libraries"].collect { |library| Narra::Library.find(library["_id"]) }
-            # firstly process libraries and overwrite with content
-            libraries.each do |library|
-              if library
-                library.destroy!
+            # resolve object by type
+            if options['project']
+              # get project
+              object = Narra::Project.find(options['project'])
+            elsif options['library']
+              # get library
+              object = Narra::Library.find(options['library'])
+            end
+            # load data
+            loaded = JSON.parse(options['data'], { symbolize_names: true })
+            # create or update metadata
+            loaded[:metadata].each_with_index do |meta, index|
+              # check for existing meta
+              m = object.get_meta(name: meta[:name])
+              # update if does exist
+              if m and meta[:value]
+                object.update_meta(name: meta[:name], value: meta[:value])
+              elsif meta[:name] and meta[:value]
+                # add new one
+                object.add_meta(name: meta[:name], value: meta[:value])
               end
+              # update progress
+              set_progress(loaded[:metadata].count / (index + 1))
             end
-            # delete project if exists
-            if project
-              project.destroy!
-            end
-            # objects to be persisted
-            to_persist = []
-            # create libraries
-            loaded["libraries"].each do |library|
-              to_persist << Narra::Library.new(library)
-            end
-            # create items
-            loaded["items"].each do |item|
-              to_persist << Narra::Text.new(item)
-            end
-            # create project
-            to_persist << Narra::Project.new(loaded["project"])
-            # persist
-            to_persist.each do |object|
-              object.save!
-            end
+            # progress done, just to be sure we're ending up at 1
+            set_progress(1.0)
           rescue => e
             # log
             Narra::Core::LOGGER.log_error(e.to_s, 'import')
@@ -61,7 +57,7 @@ module Narra
             raise e
           else
             # log
-            Narra::Core::LOGGER.log_info("Data successfully imported", 'import')
+            Narra::Core::LOGGER.log_info("#{object.name} metadata successfully imported", 'import')
             # event done
             @event.done!
           end

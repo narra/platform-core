@@ -15,7 +15,7 @@ module Narra
     include Narra::Extensions::Meta
 
     # Fields
-    field :_id, type: String
+    field :identifier, type: String
     field :thumbnails, type: Array, default: []
 
     # Meta Relations
@@ -41,8 +41,8 @@ module Narra
     scope :user, ->(user) { any_of({contributor_ids: user._id}, {author_id: user._id}) }
 
     # Validations
-    validates_uniqueness_of :id
-    validates_presence_of :id, :author_id, :scenario_id
+    validates_uniqueness_of :identifier
+    validates_presence_of :identifier, :author_id, :scenario_id
 
     # Return all project items
     def items
