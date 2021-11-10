@@ -10,6 +10,7 @@ require_relative 'workers/transcoder'
 require_relative 'workers/purge'
 require_relative 'workers/export'
 require_relative 'workers/import'
+require_relative 'workers/copy'
 
 module Narra
   module Core

@@ -24,6 +24,7 @@ require_relative 'core/items'
 require_relative 'core/purge'
 require_relative 'core/export'
 require_relative 'core/import'
+require_relative 'core/copy'
 
 module Narra
   module Core
@@ -36,6 +37,7 @@ module Narra
     include Narra::Core::Purge
     include Narra::Core::Export
     include Narra::Core::Import
+    include Narra::Core::Copy
 
     private
 
