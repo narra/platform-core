@@ -21,7 +21,7 @@ module Narra
             aws_secret_access_key: ENV['MINIO_SECRET_KEY'],
             region: 'us-east-1',
             host: 'storage',
-            endpoint: "https://#{(ENV['NARRA_STORAGE_HOSTNAME'] ||= 'test')}",
+            endpoint: "http://#{(ENV['NARRA_STORAGE_HOSTNAME'] ||= 'test')}",
             path_style: true
           }
           config.fog_directory = 'narra'
