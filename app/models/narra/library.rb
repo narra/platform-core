@@ -11,6 +11,7 @@ module Narra
     include Narra::Extensions::Description
     include Narra::Extensions::Name
     include Narra::Extensions::Meta
+    include Narra::Extensions::Stats
 
     # Fields
     field :purged, type: Boolean, default: false
@@ -36,7 +37,7 @@ module Narra
     belongs_to :scenario, inverse_of: :libraries, class_name: 'Narra::ScenarioLibrary'
 
     # Scopes
-    scope :user, ->(user) { any_of({contributor_ids:user._id}, {author_id: user._id}) }
+    scope :user, ->(user) { any_of({ contributor_ids: user._id }, { author_id: user._id }) }
 
     # Validations
     validates_presence_of :author_id, :scenario_id

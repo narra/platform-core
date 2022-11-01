@@ -78,6 +78,8 @@ module Narra
                 # destroy iten
                 item.destroy
               end
+              # update library stats
+              library.update_stats
             end
           rescue => e
             # log

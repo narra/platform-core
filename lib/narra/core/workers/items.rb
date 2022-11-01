@@ -133,6 +133,9 @@ module Narra
               # update progress
               set_progress((i + 1) / proxies.size)
             end
+
+            # update library stats
+            library.update_stats
           rescue => e
             # reset event
             @event.reset!
